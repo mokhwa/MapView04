@@ -19,20 +19,51 @@ class ViewController: UIViewController, MKMapViewDelegate {
     override func viewDidLoad() {
         super.viewDidLoad()
         // Do any additional setup after loading the view, typically from a nib.
-        
         // MKMapViewDelegate와 UIViewController(self)
         mapView.delegate = self
         
+        let path = Bundle.main.path(forResource: "MyData", ofType: "plist")
+        print(path!)
+        
+        //화일의 내용 복사하기
+
+        let contents = NSArray(contentsOfFile: path!)
+        print(contents!)
+        
+        if let myItems = contents {
+            for item in myItems {
+                let latitude = (item as AnyObject).value(forKey: "latitude")
+                let longitude = (item as AnyObject).value(forKey: "longitude")
+                let title = (item as AnyObject).value(forKey: "title")
+                let subtitle = (item as AnyObject).value(forKey: "subtitle")
+                
+                //위도, 경도 double로 형변환
+                let myLat = (latitude as! NSString).doubleValue
+                let myLng = (longitude as! NSString).doubleValue
+                
+                let pin = MKPointAnnotation()
+                pin.coordinate.latitude = myLat
+                pin.coordinate.longitude = myLng
+                pin.title = title as? String
+                pin.subtitle = subtitle as? String
+                
+                //pins 배열에. append
+                pins.append(pin)
+                
+            }
+        }
+        else {
+            print("오류")
+        }
+        mapView.showAnnotations(pins, animated: true)
         
         
         
-        // MapType 설정 (standard, hybrid, satellite)
-        mapView.mapType = MKMapType.standard
-        //mapView.mapType = MKMapType.hybrid
-        //mapView.mapType = MKMapType.satellite
+        
+        
         
         // 위도, 경도 설정 (DIT 35.165964, 129.072543)
-        let location = CLLocationCoordinate2D(latitude: 35.165964, longitude: 129.072543)
+        //let location = CLLocationCoordinate2D(latitude: 35.165964, longitude: 129.072543)
         
         // 반경 설정(숫자가 작을수록 세부적으로)
         //let span = MKCoordinateSpan(latitudeDelta: 0.005, longitudeDelta: 0.005)
@@ -45,8 +76,17 @@ class ViewController: UIViewController, MKMapViewDelegate {
         
         // mapView 에 add
         //mapView.setRegion(region, animated: true)
-        
-        
+        /*
+        let pin1 = ViewPoint(coordinate: location, title: "동의과학대학교", subtitle: "We Are DIT")
+        mapView.addAnnotation(pin1)
+        let pin2 = ViewPoint(coordinate: CLLocationCoordinate2D(latitude: 35.1681824, longitude: 129.0556455), title: "부산 시민공원", subtitle: "부산의 랜크마크")
+         mapView.addAnnotation(pin2)
+        let pin3 = ViewPoint(coordinate: CLLocationCoordinate2D(latitude: 35.147919, longitude: 129.130123), title: "광안대교", subtitle: "부산의 랜드마크")
+         mapView.addAnnotation(pin3)
+        let pin4 = ViewPoint(coordinate: CLLocationCoordinate2D(latitude: 35.0517554, longitude: 129.0856113), title: "태종대", subtitle: "해변 전망대가 있는 고지대 공원")
+         mapView.addAnnotation(pin4)
+        */
+        /*
         // pin꼽기
         let pin1 = MKPointAnnotation()
         pin1.coordinate = location
@@ -81,10 +121,9 @@ class ViewController: UIViewController, MKMapViewDelegate {
         pin4.subtitle = "해변 전망대가 있는 고지대 공원"
         //mapView.addAnnotation(pin4)
         pins.append(pin4)   //배열 pins에 pin4 넣기
-        
+        */
         // mapView의 모든 pin들을 나타냄(배열)
         // showAnnotations : 반경 지정 없이 모든 pin을 지도에 나타나게 함
-        mapView.showAnnotations(pins, animated: true)
     }
     
     // MapType 버튼 설정 (standard, hybrid, satellite)
@@ -100,8 +139,7 @@ class ViewController: UIViewController, MKMapViewDelegate {
         mapView.mapType = MKMapType.satellite
     }
     
-    
-    
+ 
     // MKMapViewDelegate 메소드
     func mapView(_ mapView: MKMapView, viewFor annotation: MKAnnotation) -> MKAnnotationView? {
         
@@ -138,19 +176,19 @@ class ViewController: UIViewController, MKMapViewDelegate {
             annotationView?.leftCalloutAccessoryView = imgV
         } else if annotation.title! == "태종대" {
             annotationView?.pinTintColor = UIColor.green
-            let imgV = UIImageView(image: UIImage(named: "태종대.jpg"))
+            let imgV = UIImageView(image: UIImage(named: "dit.png"))
             imgV.frame = CGRect(x: 0, y: 0, width: 30, height: 30)
             annotationView?.leftCalloutAccessoryView = imgV
         }
             else if annotation.title! == "광안대교" {
             annotationView?.pinTintColor = UIColor.white
-            let imgV = UIImageView(image: UIImage(named: "아잉.jpg"))
+            let imgV = UIImageView(image: UIImage(named: "dit.png"))
             imgV.frame = CGRect(x: 0, y: 0, width: 30, height: 30)
             annotationView?.leftCalloutAccessoryView = imgV
         }
         else {
             annotationView?.pinTintColor = UIColor.yellow
-            let imgV = UIImageView(image: UIImage(named: "시민공원.jpg"))
+            let imgV = UIImageView(image: UIImage(named: "dit.png"))
             imgV.frame = CGRect(x: 0, y: 0, width: 30, height: 30)
             annotationView?.leftCalloutAccessoryView = imgV
         }
