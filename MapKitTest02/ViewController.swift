@@ -136,12 +136,25 @@ class ViewController: UIViewController, MKMapViewDelegate {
             let imgV = UIImageView(image: UIImage(named: "dit.png"))
             imgV.frame = CGRect(x: 0, y: 0, width: 30, height: 30)
             annotationView?.leftCalloutAccessoryView = imgV
-        } else {
-            annotationView?.pinTintColor = UIColor.blue
-            let imgV = UIImageView(image: UIImage(named: "cat.jpg"))
+        } else if annotation.title! == "태종대" {
+            annotationView?.pinTintColor = UIColor.green
+            let imgV = UIImageView(image: UIImage(named: "태종대.jpg"))
             imgV.frame = CGRect(x: 0, y: 0, width: 30, height: 30)
             annotationView?.leftCalloutAccessoryView = imgV
         }
+            else if annotation.title! == "광안대교" {
+            annotationView?.pinTintColor = UIColor.white
+            let imgV = UIImageView(image: UIImage(named: "아잉.jpg"))
+            imgV.frame = CGRect(x: 0, y: 0, width: 30, height: 30)
+            annotationView?.leftCalloutAccessoryView = imgV
+        }
+        else {
+            annotationView?.pinTintColor = UIColor.yellow
+            let imgV = UIImageView(image: UIImage(named: "시민공원.jpg"))
+            imgV.frame = CGRect(x: 0, y: 0, width: 30, height: 30)
+            annotationView?.leftCalloutAccessoryView = imgV
+        }
+        
         
         
         
@@ -153,14 +166,11 @@ class ViewController: UIViewController, MKMapViewDelegate {
     func mapView(_ mapView: MKMapView, annotationView view: MKAnnotationView, calloutAccessoryControlTapped control: UIControl) {
         
         // 알림창 객체 생성
-        let alert = UIAlertController(title: "동의과학대학교", message: "We Are DIT", preferredStyle: .alert)
-        
+        let alert = UIAlertController(title: ((view.annotation?.title)!), message: ((view.annotation?.subtitle)!), preferredStyle: .alert)
         // 확인 버튼
         let ok = UIAlertAction(title:"확인", style: .default)
-        
         // 버튼을 컨트롤러에 등록
         alert.addAction(ok)
-        
         // 알림창 실행
         self.present(alert, animated: false)
         
